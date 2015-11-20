@@ -5,7 +5,14 @@ cd $DIR/..
 
 if [[
 "${EIP}X" == "X" ||
-"${PRIVATE_KEY_PATH}X" == "X" 
+"${PRIVATE_KEY_PATH}X" == "X" || 
+"${OS_SECURITY_GROUP}X" == "X" || 
+"${OS_AUTH_URL}X" == "X" || 
+"${OS_USERNAME}X" == "X" || 
+"${OS_PASSWORD}X" == "X" || 
+"${OS_TENANT_ID}X" == "X" || 
+"${OS_REGION_NAME}X" == "X" || 
+"${OS_KEY_NAME}X" == "X"
 ]]; then
   echo "USAGE: EIP=xxx PRIVATE_KEY_PATH=xxx ./bin/make_manifest.sh"
   exit 1
@@ -105,8 +112,8 @@ cloud_provider:
       api_key: $OS_PASSWORD
       tenant: $OS_TENANT_ID
       region: $OS_REGION_NAME
-      default_security_groups: ["concourse"] # CHANGE
-      default_key_name: concourse
+      default_security_groups: ["${OS_SECURITY_GROUP}"]
+      default_key_name: ${OS_KEY_NAME}
 
     # Tells CPI how agent should listen for requests
     agent: {mbus: "https://nats:nats@0.0.0.0:6868"}
