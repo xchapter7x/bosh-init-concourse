@@ -77,8 +77,8 @@ jobs:
 networks:
 - name: default
   type: dynamic
-- name: vip
-  type: vip
+  cloud_properties:
+    net_id: $OS_NET_ID
 
 cloud_provider:
   template: {name: openstack_cpi, release: bosh-openstack-cpi}
@@ -99,7 +99,15 @@ cloud_provider:
   mbus: https://nats:nats@$EIP:6868
 
   properties:
-    openstack: *openstack
+    openstack: 
+      auth_url: $OS_AUTH_URL
+      username: $OS_USERNAME
+      api_key: $OS_PASSWORD
+      tenant: $OS_TENANT_ID
+      region: $OS_REGION_NAME
+      default_security_groups: ["concourse"] # CHANGE
+      default_key_name: concourse
+
     # Tells CPI how agent should listen for requests
     agent: {mbus: "https://nats:nats@0.0.0.0:6868"}
 
@@ -109,5 +117,9 @@ cloud_provider:
       provider: local
       path: /var/vcap/micro_bosh/data/cache
 
-    ntp: *ntp 
+    ntp:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+      - 3.pool.ntp.org
 YAML
